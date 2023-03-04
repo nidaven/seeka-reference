@@ -1,0 +1,24 @@
+# Base Stage
+FROM python:3.8 as base
+
+# Install dependencies
+COPY app/requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
+
+# Test stage
+FROM base as test
+
+# Copy application and run tests
+COPY app /app
+WORKDIR /app
+RUN if [ $(pytest -q --junitxml=pytest-result.xml) ] ; then exit 1; else echo 'Tests Passed'; fi
+
+
+# Build stage
+FROM base as build
+
+# Copy the build environment state
+COPY --from=test /app/. /app
+
+# Build the artifacts
+ENTRYPOINT ["python", "/app/myscript.py"]

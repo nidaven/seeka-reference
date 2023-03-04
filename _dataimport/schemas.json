@@ -1,0 +1,115 @@
+{
+    "classes": [
+        {
+            "class": "Sermon",
+            "description": "Class containing information about a sermon",
+            "vectorizer": "text2vec-openai",
+            "properties": [
+                {
+                    "name": "title",
+                    "description": "Title of the sermon",
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "duration",
+                    "description": "Duration of the sermon",
+                    "moduleConfig": {                  
+                        "text2vec-openai": {
+                        "skip": true,                    
+                        "vectorizePropertyName": false   
+                        }
+                    },
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "url",
+                    "moduleConfig": {                  
+                        "text2vec-openai": {
+                        "skip": true,                    
+                        "vectorizePropertyName": false   
+                        }
+                    },
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "image_url",
+                    "moduleConfig": {                  
+                        "text2vec-openai": {
+                        "skip": true,                    
+                        "vectorizePropertyName": false   
+                        }
+                    },
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "summary",
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "full_transcript",
+                    "description": "Full transcript of the sermon",
+                    "moduleConfig": {                  
+                        "text2vec-openai": {
+                        "skip": true,                    
+                        "vectorizePropertyName": false   
+                        }
+                    },
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "date",
+                    "description": "Date the sermon was delivered",
+                    "dataType": [
+                        "text"
+                    ]
+                }
+            ]
+        },
+        {
+            "class": "SermonSegment",
+            "description": "Class containing segments of a transcript with start and end times",
+            "vectorizer": "text2vec-openai",
+            "properties": [
+                {
+                    "name": "snippet",
+                    "description": "Snippet of the transcript from sermon",
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "start_time",
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "end_time",
+                    "dataType": [
+                        "text"
+                    ]
+                },
+                {
+                    "name": "fromSermon",
+                    "description": "Sermon the segment is a part of",
+                    "dataType": [
+                        "Sermon"
+                    ]
+                }
+            ]
+        }
+
+    ]
+}
