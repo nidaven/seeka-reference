@@ -6,6 +6,7 @@ param dbImageName string
 param apiImageName string
 param location string =  'uksouth'
 param resourceGroupName string = 'rg-rhemasearch-dev'
+param OpenAIKey string
 // param environment string = 'dev'
 
 
@@ -65,6 +66,7 @@ module apiModule 'modules/containerapps/api-service.bicep' = {
     dbFQDN: databaseModule.outputs.containerAppFQDN
     apiImageName: apiImageName
     cAppsName: cAppsName
+    OpenAIKey: OpenAIKey
   }
   dependsOn: [
     rgModule

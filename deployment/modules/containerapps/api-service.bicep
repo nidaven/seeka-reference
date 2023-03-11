@@ -4,6 +4,7 @@ param location string
 param dbFQDN string
 param apiImageName string
 param cAppsName string
+param OpenAIKey string
 
 resource cAppEnv 'Microsoft.App/managedEnvironments@2022-10-01' existing = {
   name: containerAppsEnvName
@@ -32,7 +33,7 @@ resource APIService 'Microsoft.App/containerApps@2022-06-01-preview' = {
             }
             {
               name: 'OPENAI_API_KEY'
-              value: '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'
+              value: OpenAIKey
               // secretRef: 'openai-api-secret'
             }
           ]
@@ -52,7 +53,7 @@ resource APIService 'Microsoft.App/containerApps@2022-06-01-preview' = {
       secrets: [
         {
           name: 'openai-api-secret'
-          value: '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'
+          value: OpenAIKey
         }
       ]
       registries: [
