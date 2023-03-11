@@ -8,8 +8,8 @@
     "acrName": {
       "value": "seekaregistry"
     },
-    "imageName": {
-      "value": "docker.io/nidaven/rhemasearch_db:latest"
+    "dbImageName": {
+      "value": "docker.io/nidaven/rhemasearch_db:0.1"
     },
     "location": {
       "value": "uksouth"
@@ -17,8 +17,8 @@
     "resourceGroupName": {
       "value": "rg-rhemasearch-dev"
     },
-    "dockerImage": {
-      "value": "rhemasearch_db:latest"
+    "apiImageName": {
+      "value": "docker.io/nidaven/rhemasearch:0.2"
     }
   }
 }

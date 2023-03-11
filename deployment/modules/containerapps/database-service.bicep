@@ -1,52 +1,30 @@
 param containerAppsEnvName string
 param location string
-param dockerImage string
-// param acrLoginServer string
-// param imageName string
-
-// @description('user-assigned identity for pull acr images')
-// param uai string
+param dbImageName string
+param cAppsName string
 
 resource cAppEnv 'Microsoft.App/managedEnvironments@2022-10-01' existing = {
   name: containerAppsEnvName
 }
 
-
 resource databaseService 'Microsoft.App/containerApps@2022-06-01-preview' = {
-  name: 'db-service'
+  name: '${cAppsName}-db-service'
   location : location
-  // identity: {
-  //   type: 'UserAssigned'
-  //   userAssignedIdentities: {
-  //     '${uai}' : {}
-  //   }
-  // }
   properties: {
     environmentId: cAppEnv.id
     template: {
       containers: [
         {
           name: 'rhema-db-service'
-          image: 'nidaven/rhemasearch_db:0.1'
+          image: dbImageName
           resources: {
             cpu: 1
             memory: '2Gi'
           }
-          //TODO: add resources that can be used by the container app
         }
       ]
       scale: {
         minReplicas: 0
-        // rules: [
-        //   {
-        //     name: 'http-requests'
-        //     http: {
-        //       metadata: {
-        //         concurrentRequests: '5'
-        //       }
-        //     }
-        //   }
-        // ]
       }
     }
     configuration: {
@@ -57,18 +35,8 @@ resource databaseService 'Microsoft.App/containerApps@2022-06-01-preview' = {
         transport: 'auto'
       }
       secrets: [
-        {
-          name: 'reg-pswd'
-          value: '2992n@V!Ad14c11e18'
-        }
       ]
       registries: [
-        // {
-        //   // identity: uai
-        //   server: 'docker.io'
-        //   username: 'nidaven'
-        //   passwordSecretRef: 'reg-pswd'
-        // }
       ]
       activeRevisionsMode: 'Single'
     }

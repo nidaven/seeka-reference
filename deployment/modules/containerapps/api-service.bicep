@@ -1,18 +1,16 @@
 // TODO: add
 param containerAppsEnvName string
 param location string
-// param acrLoginServer string
-// param imageName string
-
-// @description('user-assigned identity for pull acr images')
-// param uai string
+param dbFQDN string
+param apiImageName string
+param cAppsName string
 
 resource cAppEnv 'Microsoft.App/managedEnvironments@2022-10-01' existing = {
   name: containerAppsEnvName
 }
 
 resource APIService 'Microsoft.App/containerApps@2022-06-01-preview' = {
-  name: 'api-service'
+  name: '${cAppsName}-api-service'
   location : location
 
   properties: {
@@ -20,8 +18,8 @@ resource APIService 'Microsoft.App/containerApps@2022-06-01-preview' = {
     template: {
       containers: [
         {
-          name: 'api-service'
-          image: 'docker.io/nidaven/rhemasearch:0.2'
+          name: '${cAppsName}-api-service'
+          image: apiImageName
           resources: {
             cpu: 1
             memory: '2Gi'
@@ -29,15 +27,15 @@ resource APIService 'Microsoft.App/containerApps@2022-06-01-preview' = {
           env: [
             {
               name: 'DB_FQDN'
-              value: 'https://seeka-search-docker.redmoss-0aaa867a.uksouth.azurecontainerapps.io'
+              // value: 'https://seeka-search-docker.redmoss-0aaa867a.uksouth.azurecontainerapps.io'
+              value: 'https://${dbFQDN}'
             }
             {
               name: 'OPENAI_API_KEY'
-              // secretRef: 'openai-api-secret' 
               value: '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'
+              // secretRef: 'openai-api-secret'
             }
           ]
-          //TODO: add resources that can be used by the container app
         }
       ]
       scale: {
@@ -53,20 +51,11 @@ resource APIService 'Microsoft.App/containerApps@2022-06-01-preview' = {
       }
       secrets: [
         {
-          name: 'reg-pswd'
-          value: '2992n@V!Ad14c11e18'
-        }
-        {
           name: 'openai-api-secret'
           value: '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'
         }
       ]
       registries: [
-        // {
-        //   server: 'docker.io'
-        //   username: 'nidaven'
-        //   passwordSecretRef: 'reg-pswd'
-        // }
       ]
       activeRevisionsMode: 'Single'
     }

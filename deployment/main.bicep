@@ -2,10 +2,10 @@ targetScope = 'subscription' //setting target scope to subscription scope sets a
 
 param cAppsName string
 param acrName string
-param imageName string
+param dbImageName string 
+param apiImageName string
 param location string =  'uksouth'
 param resourceGroupName string = 'rg-rhemasearch-dev'
-param dockerImage string
 // param environment string = 'dev'
 
 
@@ -17,25 +17,24 @@ module rgModule 'modules/rg-rhemasearch.bicep' = {
   }
 }
 
-
-module acrModule 'modules/container-registry.bicep' = {
-  name: '${deployment().name}--container-registry'
-  params: {
-    acrName: acrName
-    location: location
-    dockerRegimageName: imageName
-  }
-  dependsOn: [
-    rgModule
-  ]
-  scope: resourceGroup(resourceGroupName)
-}
+// module acrModule 'modules/container-registry.bicep' = {
+//   name: '${deployment().name}--container-registry'
+//   params: {
+//     acrName: acrName
+//     location: location
+//     dockerRegimageName: imageName
+//   }
+//   dependsOn: [
+//     rgModule
+//   ]
+//   scope: resourceGroup(resourceGroupName)
+// }
 
 module cAppsEnvModule 'modules/containerapps/containerapps-env.bicep' = {
   name: '${deployment().name}--containerapps-env'
   params: {
     location: location
-    containerAppsEnvName: cAppsName
+    cAppsName: cAppsName
   }
   dependsOn: [
     rgModule
@@ -48,7 +47,8 @@ module databaseModule 'modules/containerapps/database-service.bicep' = {
   params: {
     location: location
     containerAppsEnvName: cAppsEnvModule.outputs.cAppsEnvName
-    dockerImage: dockerImage
+    dbImageName: dbImageName
+    cAppsName: cAppsName
   }
   dependsOn: [
     rgModule
@@ -62,6 +62,9 @@ module apiModule 'modules/containerapps/api-service.bicep' = {
   params: {
     location: location
     containerAppsEnvName: cAppsEnvModule.outputs.cAppsEnvName
+    dbFQDN: databaseModule.outputs.containerAppFQDN
+    apiImageName: apiImageName
+    cAppsName: cAppsName
   }
   dependsOn: [
     rgModule
