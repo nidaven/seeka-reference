@@ -17,10 +17,6 @@ module rgModule 'modules/rg-rhemasearch.bicep' = {
   }
 }
 
-// resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-//   name: '${resourceGroupName}-${environment}'
-//   location: location
-// }
 
 module acrModule 'modules/container-registry.bicep' = {
   name: '${deployment().name}--container-registry'
@@ -61,4 +57,19 @@ module databaseModule 'modules/containerapps/database-service.bicep' = {
   scope: resourceGroup(resourceGroupName)
 }
 
+module apiModule 'modules/containerapps/api-service.bicep' = {
+  name: '${deployment().name}--api-service'
+  params: {
+    location: location
+    containerAppsEnvName: cAppsEnvModule.outputs.cAppsEnvName
+  }
+  dependsOn: [
+    rgModule
+    cAppsEnvModule
+    databaseModule
+  ]
+  scope: resourceGroup(resourceGroupName)
+}
+
 output databaseFQDN string = databaseModule.outputs.containerAppFQDN
+output apiFQDN string = apiModule.outputs.APIFQDN

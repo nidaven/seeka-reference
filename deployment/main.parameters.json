@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "cAppsName": {
+      "value": "rhemasearch"
+    },
+    "acrName": {
+      "value": "seekaregistry"
+    },
+    "imageName": {
+      "value": "docker.io/nidaven/rhemasearch_db:latest"
+    },
+    "location": {
+      "value": "uksouth"
+    },
+    "resourceGroupName": {
+      "value": "rg-rhemasearch-dev"
+    },
+    "dockerImage": {
+      "value": "rhemasearch_db:latest"
+    }
+  }
+}

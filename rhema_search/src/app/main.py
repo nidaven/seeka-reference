@@ -12,10 +12,17 @@ logger.add("out.log", backtrace=True, diagnose=True)
 if os.getenv("OPENAI_API_KEY") is not None:
     print ("OPENAI_API_KEY is ready")
 else:
-    print ("OPENAI_API_KEY environment variable not found")
+    raise ValueError("OPENAI_API_KEY environment variable not found")
+
+if os.getenv("DB_FQDN") is None:
+    raise ValueError("DB_FQDN environment variable not found")
+else:
+    DB_FQDN = os.getenv("DB_FQDN")
+
+# DB_FQDN = "https://seeka-search-docker.redmoss-0aaa867a.uksouth.azurecontainerapps.io"
 
 client = weaviate.Client(
-    url="http://192.168.1.115:8889/",
+    url=DB_FQDN,
     additional_headers={
         "X-OpenAI-Api-Key": os.getenv("OPENAI_API_KEY")
     }
@@ -48,6 +55,10 @@ class SermonSearchQuery:
 def get_home_page():
     return 'Welcome to RhemaSearch'
 
+
+#TODO: entire code to be refactored as into a separate method that returns just the snippets.
+#TODO: should accept parameters for limit, keyword, and class object
+#TODO: based on query should have mutliple query definitions
 @app.get("/sermon")
 def get_matching_snippets(keyword: str, limit: int = 5):
     sermon_class = "SermonSegment"
@@ -65,6 +76,7 @@ def get_matching_snippets(keyword: str, limit: int = 5):
     }
 
     result = (
+        #TODO: Refactor to database vector search class
         client.query
             .get(sermon_class, 
                 query_definition)

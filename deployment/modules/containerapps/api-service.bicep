@@ -1,6 +1,6 @@
+// TODO: add
 param containerAppsEnvName string
 param location string
-param dockerImage string
 // param acrLoginServer string
 // param imageName string
 
@@ -11,48 +11,43 @@ resource cAppEnv 'Microsoft.App/managedEnvironments@2022-10-01' existing = {
   name: containerAppsEnvName
 }
 
-
-resource databaseService 'Microsoft.App/containerApps@2022-06-01-preview' = {
-  name: 'db-service'
+resource APIService 'Microsoft.App/containerApps@2022-06-01-preview' = {
+  name: 'api-service'
   location : location
-  // identity: {
-  //   type: 'UserAssigned'
-  //   userAssignedIdentities: {
-  //     '${uai}' : {}
-  //   }
-  // }
+
   properties: {
     environmentId: cAppEnv.id
     template: {
       containers: [
         {
-          name: 'rhema-db-service'
-          image: 'nidaven/rhemasearch_db:0.1'
+          name: 'api-service'
+          image: 'docker.io/nidaven/rhemasearch:0.2'
           resources: {
             cpu: 1
             memory: '2Gi'
           }
+          env: [
+            {
+              name: 'DB_FQDN'
+              value: 'https://seeka-search-docker.redmoss-0aaa867a.uksouth.azurecontainerapps.io'
+            }
+            {
+              name: 'OPENAI_API_KEY'
+              // secretRef: 'openai-api-secret' 
+              value: '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'
+            }
+          ]
           //TODO: add resources that can be used by the container app
         }
       ]
       scale: {
         minReplicas: 0
-        // rules: [
-        //   {
-        //     name: 'http-requests'
-        //     http: {
-        //       metadata: {
-        //         concurrentRequests: '5'
-        //       }
-        //     }
-        //   }
-        // ]
       }
     }
     configuration: {
       ingress: {
         external: true
-        targetPort: 8888
+        targetPort: 8081
         allowInsecure: true
         transport: 'auto'
       }
@@ -61,10 +56,13 @@ resource databaseService 'Microsoft.App/containerApps@2022-06-01-preview' = {
           name: 'reg-pswd'
           value: '2992n@V!Ad14c11e18'
         }
+        {
+          name: 'openai-api-secret'
+          value: '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'
+        }
       ]
       registries: [
         // {
-        //   // identity: uai
         //   server: 'docker.io'
         //   username: 'nidaven'
         //   passwordSecretRef: 'reg-pswd'
@@ -76,4 +74,4 @@ resource databaseService 'Microsoft.App/containerApps@2022-06-01-preview' = {
 
 }
 
-output containerAppFQDN string = databaseService.properties.configuration.ingress.fqdn
+output APIFQDN string = APIService.properties.configuration.ingress.fqdn

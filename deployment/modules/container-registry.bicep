@@ -16,6 +16,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2022-12-01' = {
   }
 }
 
+// TODO: unable to seed the ACR due to managed identity issues
 
 // @description('This module seeds the ACR with the public version of the app')
 // module acrImportImage 'br/public:deployment-scripts/import-acr:3.0.1' =  {
