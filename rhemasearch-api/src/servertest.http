@@ -1,0 +1,38 @@
+
+GET http://localhost:8000/sermon/?keyword=communicate
+Content-Type: application/json
+
+###
+
+
+GET http://localhost:8000/docs
+Content-Type: application/json
+
+###
+
+GET http://localhost:8001/sermon/search/?keyword=husband%20and
+Content-Type: application/json
+
+
+###
+
+GET http://localhost:8001/sermon/exactsearch/?keyword=love%20walk
+Content-Type: application/json
+
+
+###
+
+GET https://rhemasearch.redmoss-0aaa867a.uksouth.azurecontainerapps.io/sermon/?keyword=sex
+Content-Type: application/json
+
+
+###
+
+GET https://api-service.redmoss-0aaa867a.uksouth.azurecontainerapps.io/sermon/?keyword=wife
+Content-Type: application/json
+
+
+###
+
+GET https://rhemasearch-api-service.redmoss-0aaa867a.uksouth.azurecontainerapps.io/sermon/?keyword=husband
+Content-Type: application/json
