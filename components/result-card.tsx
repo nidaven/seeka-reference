@@ -35,18 +35,18 @@ function ResultCard({ title, text, image, timestamp }: Props) {
         <Card className="max-w-[780px]">
             <CardHeader className="grid md:grid-cols-[1fr_100px] items-start gap-4 space-y-0">
                 <div>
-                    <CardDescription className="text-ellipsis">
-                        <p className="text-7xl font-extrabold text-sky-400">&ldquo;</p>
+                    <CardDescription className="text-ellipsis p-2">
+                        <p className="text-8xl text-center h-16 text-gray-400">&ldquo;</p>
                         <p className="text-md italic">{text}</p>
                     </CardDescription>
                     <Separator className="my-4"/>
-                    <div className="mt-2" >
-                        <div className="m-1 mt-4 flex items-center">
+                    <div className="mt-4" >
+                        <div className="m-2 mt-4 flex items-center">
                             <Circle className="mr-2 h-3 w-3 fill-sky-400 text-sky-400" />
                             <div className="text-sm font-medium leading-none text-muted-foreground">{title}</div>
                         </div>
                         <div className="m-1 mt-2 flex items-center">
-                            <History className="mr-1 h-3 w-3" />
+                            <History className="mr-2 h-3 w-3" />
                             <div className="text-sm text-muted-foreground">{formatted_time}</div>
                         </div>
                     </div>
