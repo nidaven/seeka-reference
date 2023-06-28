@@ -10,6 +10,14 @@ import ResultCard from "@/components/result-card"
 import { Separator } from "@/components/ui/separator"
 import { Icons } from "@/components/icons"
 import { useState } from "react"
+import getConfig from "next/config"
+import next from "next/types"
+
+// import config from next.config.mjs file environment variables
+
+const { publicRuntimeConfig } = getConfig();
+const API_URL = publicRuntimeConfig.API_URL;
+// console.log(API_URL);
 
 export default function IndexPage() {
   const [searchInput, setSearchInput] = useState('');
@@ -20,7 +28,7 @@ export default function IndexPage() {
     try {
       setIsLoading(true);
       console.log(searchInput);
-      const response = await fetch(`http://192.168.1.115:8080/sermon/search/?keyword=${searchInput}`);
+      const response = await fetch(`${API_URL}/sermon/search/?keyword=${searchInput}`);
       const data = await response.json();
       setResult(data);
     } catch (error) {
@@ -33,7 +41,7 @@ export default function IndexPage() {
   return (
     <Layout>
       <Head>
-        <title>Next.js</title>
+        <title>Seeka</title>
         <meta
           name="description"
           content="Next.js template for building apps with Radix UI and Tailwind CSS"
@@ -44,10 +52,10 @@ export default function IndexPage() {
       <section className="container grid items-center gap-6 pt-6 pb-4 md:pt-10 px-10 ">
         <div className="flex max-w-[980px] flex-col items-start gap-2">
           <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-            Rhemasearch <br className="hidden sm:inline" />
+            Seeka <br className="hidden sm:inline" />
           </h1>
           <p className="max-w-[700px] text-lg text-slate-700 dark:text-slate-400 sm:text-xl items-center justify-center">
-            <br className="hidden sm:inline" /> Search across sermons and get accurate timestamps.
+            <br className="hidden sm:inline" /> Remember only the word or phrase from a sermon? <br></br>Let&apos;s help you find it.
           </p>
         </div>
         <div className="flex flex-col items-center gap-4 md:flex-row">
@@ -68,7 +76,7 @@ export default function IndexPage() {
       </section>
       <section className="container grid items-center gap-6 pt-2 pb-2 md:py-10 px-2 sm:py-4 ">
         <div className="items-start justify-center gap-6 rounded-lg p-4 md:grid lg:grid-cols-2">
-         {result.length > 0 ? (<div className="m-4 text-gray-400 text-muted-foreground">{`Found ${result.length} results`}</div>) : null}
+         {result.length > 0 ? (<div className="m-4 text-muted-foreground">{`Found ${result.length} results`}</div>) : null}
           <div className="col-span-2 grid items-start gap-6">
             {result.map((item, index) => (
               <ResultCard

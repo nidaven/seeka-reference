@@ -37,7 +37,7 @@ function ResultCard({ title, text, image, timestamp }: Props) {
                 <div>
                     <CardDescription className="text-ellipsis p-2">
                         <p className="text-8xl text-center h-16 text-gray-400">&ldquo;</p>
-                        <p className="text-md italic">{text}</p>
+                        <p className="text-md italic">...{text}...</p>
                     </CardDescription>
                     <Separator className="my-4"/>
                     <div className="mt-4" >
