@@ -12,33 +12,33 @@ import { Icons } from "@/components/icons"
 import { useState } from "react"
 import getConfig from "next/config"
 import next from "next/types"
-import weaviate, { WeaviateClient } from "weaviate-ts-client"
+// import weaviate, { WeaviateClient } from "weaviate-ts-client"
 
 // import config from next.config.mjs file environment variables
 
-const { publicRuntimeConfig } = getConfig();
-const API_URL = publicRuntimeConfig.API_URL;
-console.log(process.env.OPENAI_APIKEY)
-const client: WeaviateClient = weaviate.client({
-  scheme: "http",
-  host: "192.168.1.115:8891",
-  // headers: { 'X-OpenAI-Api-Key': process.env.OPENAI_API_KEY },
-});
+// const { publicRuntimeConfig } = getConfig();
+// const API_URL = publicRuntimeConfig.API_URL;
+// console.log(process.env.OPENAI_APIKEY)
+// const client: WeaviateClient = weaviate.client({
+//   scheme: "http",
+//   host: "192.168.1.115:8891",
+//   // headers: { 'X-OpenAI-Api-Key': process.env.OPENAI_API_KEY },
+// });
 
-// console.log(API_URL);
-interface Snippet {
-  snippet: string;
-  start_time: string;
-  sermon_title: string;
-  url: string;
-  image_url?: string;
-  date?: string;
-  summary?: string;
-}
+// // console.log(API_URL);
+// interface Snippet {
+//   snippet: string;
+//   start_time: string;
+//   sermon_title: string;
+//   url: string;
+//   image_url?: string;
+//   date?: string;
+//   summary?: string;
+// }
 
-interface Snippets {
-  snippets: Snippet[];
-}
+// interface Snippets {
+//   snippets: Snippet[];
+// }
 
 const queryDefinition = "snippet start_time fromSermon { ... on Sermon {title, url, date, summary, image_url } }";
 
@@ -47,62 +47,54 @@ export default function IndexPage() {
   const [result, setResult] = useState([]);
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  // const handleSearchClick = async () => {
+  //   setIsLoading(true);
+
+  //   const limit = 20;
+  //   const sermon_class = "SermonSegment" 
+  //   const query_definition = queryDefinition 
+
+  //   .then((res) => {
+  //     const results = res.data.Get.SermonSegment;
+
+  //     console.log(results);
+
+  //     const snippetsList: Snippets = { snippets: results.map((snippet: any) => ({
+  //       snippet: snippet.snippet,
+  //       start_time: snippet.start_time,
+  //       sermon_title: snippet.fromSermon[0].title,
+  //       url: `${snippet.fromSermon[0].url}?t=${Math.floor(parseFloat(snippet.start_time))}`,
+  //       image_url: snippet.fromSermon[0].image_url,
+  //       date: snippet.fromSermon[0].date,
+  //       summary: snippet.fromSermon[0].summary
+  //     }))};
+
+  //    const filteredSnippets = snippetsList.snippets.filter((snippet) => snippet.snippet.split(' ').length > 10);
+  
+  //     setResult(filteredSnippets);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   })
+  //   .finally(() => {
+  //     setIsLoading(false);
+  //   });
+  // };
+
   const handleSearchClick = async () => {
     setIsLoading(true);
-
-    const limit = 20;
-    const sermon_class = "SermonSegment" 
-    const query_definition = queryDefinition 
-
-    client.graphql
-    .get()
-    .withNearText({
-      concepts: [searchInput],
-    })
-    .withClassName(sermon_class)
-    .withFields(query_definition)
-    .withLimit(limit)
-    .do()
-    .then((res) => {
-      const results = res.data.Get.SermonSegment;
-
-      console.log(results);
-
-      const snippetsList: Snippets = { snippets: results.map((snippet: any) => ({
-        snippet: snippet.snippet,
-        start_time: snippet.start_time,
-        sermon_title: snippet.fromSermon[0].title,
-        url: `${snippet.fromSermon[0].url}?t=${Math.floor(parseFloat(snippet.start_time))}`,
-        image_url: snippet.fromSermon[0].image_url,
-        date: snippet.fromSermon[0].date,
-        summary: snippet.fromSermon[0].summary
-      }))};
-
-     const filteredSnippets = snippetsList.snippets.filter((snippet) => snippet.snippet.split(' ').length > 10);
   
-      setResult(filteredSnippets);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
+    try {
+      const response = await fetch(`/api/search?searchInput=${searchInput}`);
+      const data = await response.json();
+      console.log(data);
+      setResult(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setIsLoading(false);
-    });
+    }
   };
-
-  // const handleSearchClick = async () => {
-  //   try {
-  //     setIsLoading(true);
-  //     console.log(searchInput);
-  //     const response = await fetch(`${API_URL}/sermon/search/?keyword=${searchInput}`);
-  //     const data = await response.json();
-  //     setResult(data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setIsLoading(false); // Set loading state back to false
-  //   }
-  // };
 
   return (
     <Layout>
@@ -110,7 +102,7 @@ export default function IndexPage() {
         <title>Seeka</title>
         <meta
           name="description"
-          content="Next.js template for building apps with Radix UI and Tailwind CSS"
+          content="Next.js template for buildlsing apps with Radix UI and Tailwind CSS"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />

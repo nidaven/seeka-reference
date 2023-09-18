@@ -11,6 +11,7 @@ const nextConfig = {
   },
   publicRuntimeConfig: {
     API_URL: process.env.API_URL || 'http://localhost:8080',
+    VECTOR_LIBRARY: 'weaviate',
     DEBUG: true,
   },
 }
